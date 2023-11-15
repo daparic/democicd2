@@ -15,7 +15,7 @@ jobs:
       - name: 1) Gotta checkout the codes
         uses: actions/checkout@v3
       - name: 3) Run Parasoft static analysis
-        run: "/c/Program Files (x86)/Parasoft/C++test for Visual Studio/10.6"/cpptestcli.exe -config "builtin://Effective C++" -solution demo-visualstudio.sln -report report
+        run: cpptestcli.exe -config "builtin://Effective C++" -solution demo-visualstudio.sln -report report
       - name: 4) Upload results (SARIF)
         if: always()
         uses: github/codeql-action/upload-sarif@v2
