@@ -1,0 +1,29 @@
+name: demo
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+  workflow_dispatch:
+jobs:
+  italian:
+    name: Run Parasoft Static Analysis
+    runs-on: self-hosted
+    permissions:
+      security-events: write
+    steps:
+      - name: 1) Gotta checkout the codes
+        uses: actions/checkout@v3
+      - name: 3) Run Parasoft static analysis
+        run: "/c/Program Files (x86)/Parasoft/C++test for Visual Studio/10.6"/cpptestcli.exe -config "builtin://Effective C++" -solution demo-visualstudio.sln -report report
+      - name: 4) Upload results (SARIF)
+        if: always()
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: report/report.sarif
+      - name: 5) Archive reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: CpptestReports
+          path: report/*.*      
